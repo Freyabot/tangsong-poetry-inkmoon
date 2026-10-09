@@ -60,3 +60,8 @@ body :is(button,a,p,h1,h2,h3,span,strong,small,label,output,blockquote){text-sha
 .success .full-quote{animation:none;filter:none!important}.boot-logo svg{filter:none}.primary,.primary:hover,button:hover,button:focus-visible{box-shadow:none}.button-star-fragment{ text-shadow:0 0 6px #d9efff!important}
 .boot-enter{margin-top:24px;min-width:150px}.boot-caption{letter-spacing:.1em}
 .success-glow{display:none}
+
+/* Keep the cursor above the loading overlay; native pointer remains a boot fallback. */
+#star-cursor{z-index:3000}
+body.booting.has-star-cursor{cursor:auto}body.booting.has-star-cursor button{cursor:pointer}
+
