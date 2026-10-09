@@ -2,7 +2,7 @@
 import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';import {createStore} from '../dist/store.mjs';import {resonanceSentences,meaningPreview} from '../dist/resonance.mjs';
 const data=JSON.parse(fs.readFileSync(new URL('../dist/poems.json',import.meta.url),'utf8'));
 const elements=new Map();
-class E{constructor(){this._html='';this.children=[];this.style={};this.isConnected=true;this.classList={add(){},remove(){},toggle(){},contains(){return false}}}set innerHTML(s){this._html=s;for(const id of [...elements.keys()])if(!['#app','#notice','#stars','#confirm','#confirm-title','#confirm-body'].includes(id))elements.delete(id)}get innerHTML(){return this._html}querySelector(k){return get(k)}querySelectorAll(){return []}addEventListener(){}setAttribute(){}append(e){this.children.push(e)}focus(){}click(){}setPointerCapture(){}}
+class E{constructor(){this._html='';this.children=[];this.style={};this.isConnected=true;this.classList={add(){},remove(){},toggle(){},contains(){return false}}}set innerHTML(s){this._html=s;for(const id of [...elements.keys()])if(!['#app','#notice','#stars','#confirm','#confirm-title','#confirm-body'].includes(id))elements.delete(id)}get innerHTML(){return this._html}querySelector(k){return get(k)}querySelectorAll(){return []}addEventListener(){}setAttribute(){}removeAttribute(){}append(e){this.children.push(e)}focus(){}click(){}setPointerCapture(){}}
 const get=k=>{if(!elements.has(k))elements.set(k,new E());return elements.get(k)};
 class Memory{map=new Map();get length(){return this.map.size}key(i){return [...this.map.keys()][i]}getItem(k){return this.map.get(k)??null}setItem(k,v){this.map.set(k,v)}removeItem(k){this.map.delete(k)}}
 let glyphGate=null;const soundCalls=[],delays=[];
