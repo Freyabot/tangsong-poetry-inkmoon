@@ -1,0 +1,15 @@
+const started=performance.now();document.body.classList.toggle('reduced',matchMedia('(prefers-reduced-motion: reduce)').matches);
+export function bootProgress(value){document.querySelector('#boot-fill')?.style.setProperty('transform',`scaleX(${value/100})`);document.querySelector('.boot-track')?.setAttribute('aria-valuenow',String(value))}
+export function failBoot(){document.querySelector('#boot-screen')?.remove();document.body.classList.remove('booting')}
+const bounded=(p,label)=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error(label)),15000);p.then(v=>{clearTimeout(timer);resolve(v)},e=>{clearTimeout(timer);reject(e)})});
+export async function finishBoot({music,sound}){
+ const caption=document.querySelector('.boot-caption'),center=document.querySelector('.boot-center');sound.prepare();let partial=false;
+ while(true){caption.textContent='正在准备音乐与诗境';const labels=['背景','加载图案','音乐'];const result=await Promise.allSettled([bounded(document.querySelector('#landscape img').decode(),'背景'),bounded(document.querySelector('.boot-artwork').decode(),'图案'),music.ready]);const failed=result.map((r,i)=>r.status==='rejected'?labels[i]:null).filter(Boolean);if(!failed.length)break;
+ caption.textContent=failed.join('、')+'未能准备好，请重试';const retry=document.createElement('button'),continueButton=document.createElement('button');retry.className='primary boot-enter';retry.textContent='重试准备';continueButton.textContent='暂不播放音乐，继续阅读';center.append(retry,continueButton);
+ const choice=await new Promise(resolve=>{retry.onclick=()=>resolve('retry');continueButton.onclick=()=>resolve('continue')});retry.remove();continueButton.remove();
+ if(choice==='continue'){music.skip();partial=true;break}if(failed.includes('音乐'))music.retry();for(const img of [document.querySelector('#landscape img'),document.querySelector('.boot-artwork')]){if(!img.complete||!img.naturalWidth){const picture=img.closest('picture');picture?.querySelector('source')?.remove();img.src=(img.currentSrc||img.src).split('?')[0]+'?retry='+Date.now()}}
+ }
+ bootProgress(100);caption.textContent=partial?'诗词已就绪，本次暂不播放音乐':'音乐与音效已就绪';const enter=document.createElement('button');enter.className='primary boot-enter';enter.textContent='进入诗境';center.append(enter);
+ await new Promise(resolve=>{enter.onclick=async()=>{if(enter.disabled)return;enter.disabled=true;try{await bounded(Promise.all([sound.unlock(),music.unlock()]),'声音开启超时，请重试');if(!sound.unlocked||!music.readyToEnter)throw Error('声音尚未开启，请重试');sound.click();resolve()}catch(e){caption.textContent=e.message;enter.disabled=false;if(!center.querySelector('.boot-silent')){const silent=document.createElement('button');silent.className='boot-silent';silent.textContent='暂不播放声音，进入诗境';silent.onclick=()=>{music.skip();resolve()};center.append(silent)}}}});
+ const screen=document.querySelector('#boot-screen');document.body.classList.remove('booting');if(!document.body.classList.contains('reduced')&&screen?.animate)await screen.animate([{opacity:1},{opacity:0}],{duration:200,fill:'forwards'}).finished.catch(()=>{});screen?.remove();
+}
