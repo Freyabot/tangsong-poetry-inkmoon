@@ -15,8 +15,8 @@ assert.equal(snapTarget(3.8,2,4),4);assert.equal(snapTarget(-.5,-2,4),-1);assert
 const settled=[],ticks=[];let began=0;const el=new Picker(),wheel=createWheel(el,{onBegin:()=>began++,onTick:n=>ticks.push(n),onSettle:n=>settled.push(n)});
 assert.equal(wheel.position,-1);el.emit('pointerdown');advance(16);el.emit('pointermove',{clientY:4});assert.equal(wheel.dragging,true);assert.equal(wheel.position,.5);assert.equal(settled.length,0);assert(el.nodes[2].style.transform.includes('32px'));
 el.emit('pointerup',{clientY:4});advance(160);assert(!Number.isInteger(wheel.position));assert.equal(settled.length,0);advance(180);assert.equal(wheel.position,2);assert.deepEqual(settled,[2]);assert(ticks.includes(1)&&ticks.includes(2));
-wheel.to(4);advance(32);el.emit('pointerdown');el.emit('pointercancel');advance(500);assert.equal(settled.length,1);
-el.emit('wheel',{deltaY:40,deltaMode:0});advance(90);assert.equal(settled.length,1);advance(400);assert.equal(settled.length,2);
+wheel.to(4);advance(32);el.emit('pointerdown');el.emit('pointercancel');advance(500);assert.equal(settled.length,2);assert.equal(settled.at(-1),Math.round(wheel.position));
+el.emit('wheel',{deltaY:40,deltaMode:0});advance(90);assert.equal(settled.length,2);advance(400);assert.equal(settled.length,3);
 const before=settled.length;wheel.to(0);advance(32);wheel.destroy();advance(500);assert.equal(settled.length,before);el.emit('keydown',{key:'ArrowDown'});advance(500);assert.equal(settled.length,before);assert.equal(el.events.get('wheel').size,0);assert(began>0);
 const reducedEl=new Picker(),reduced=createWheel(reducedEl,{reduced:()=>true});reduced.to(1);advance(100);assert.equal(reduced.position,1);assert(reducedEl.nodes[2].style.transform.includes('rotateX(0deg)'));reduced.destroy();
 const calls=[];function animated(name){return {style:{transform:'translate3d(0,-50%,0)'},dataset:{x:'10',y:'-20'},animate(frames,options){calls.push({name,frames,options});return {finished:Promise.resolve(),cancel(){}}}}}
