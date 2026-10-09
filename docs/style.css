@@ -41,3 +41,22 @@ body.reduced #star-cursor svg{animation:none}@media(prefers-reduced-motion:reduc
 @keyframes confirm-enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 body.reduced .boot-logo,body.reduced .boot-shadow,body.reduced .confirm-choice button{animation:none}
 @media(prefers-reduced-motion:reduce){.boot-logo,.boot-shadow,.confirm-choice button{animation:none}#boot-fill{transition:none}}
+/* Moonlight remains visible at rest, across every screen. */
+:root{--glow-soft:0 0 6px #cdeaff66,0 0 16px #a4d7ff40;--glow-text:0 0 3px #fff3dd80,0 0 12px #c6e8ff80,0 0 30px #a7d8ff55;--glow-eye:0 0 4px #fff6e5dd,0 0 15px #d6eeffcc,0 0 34px #acd9ffaa,0 0 62px #8ecaff66}
+.brand,.view h1,.view h2,.detail h1{ text-shadow:var(--glow-text)}
+.brand .brand-tagline,nav button,.byline,.chapter-note,.instruction,.progress-label,.boot-caption,.setting-row label,.volume-control output,.explanation h3,.poem-link,.row-status,.tabs button,.pagination,.feedback{ text-shadow:var(--glow-soft)}
+.sentence,.full-text,.full-quote,.reading.success .full-quote,.detail blockquote{ text-shadow:var(--glow-text)}
+.picker-slot[aria-current="true"]{color:#fff6e8;text-shadow:var(--glow-eye)}
+.picker-slot:not([aria-current="true"]){text-shadow:0 0 12px #abd7ff55}
+.reading.success .quote-line mark{color:#fff6e8;text-shadow:var(--glow-eye)}
+.explanation p,.setting-row p,.intro,.resonance-tags,.kaomoji{ text-shadow:0 0 10px #acd8ff38}
+button,a{ text-shadow:var(--glow-soft)}
+button:hover,a:hover,nav button.active,.tabs button.selected{ text-shadow:var(--glow-text)}
+.primary{border-color:#b8e1ff99;box-shadow:0 0 10px #a6d7ff38,inset 0 0 12px #a6d7ff18;text-shadow:var(--glow-text)}
+.primary:hover{box-shadow:0 0 18px #b5e0ff70,inset 0 0 15px #a6d7ff28}
+.track span,#boot-fill{box-shadow:0 0 8px #d1eaffbb,0 0 18px #9ed4ff88}
+.star{box-shadow:0 0 7px 2px #cbeaff99,0 0 16px #a5d6ff66}
+.boot-logo svg{filter:drop-shadow(0 0 7px #cdeaff90) drop-shadow(0 0 22px #a9d9ff66)}
+.boot-track{overflow:visible}
+input[type=range],input[type=checkbox]{filter:drop-shadow(0 0 5px #abd9ff50)}
+@keyframes breathe{0%,100%{filter:drop-shadow(0 0 4px #abdfff55)}50%{filter:drop-shadow(0 0 12px #c4e8ff88)}}
