@@ -63,5 +63,5 @@ body :is(button,a,p,h1,h2,h3,span,strong,small,label,output,blockquote){text-sha
 
 /* Keep the cursor above the loading overlay; native pointer remains a boot fallback. */
 #star-cursor{z-index:3000}
-body.booting.has-star-cursor{cursor:auto}body.booting.has-star-cursor button{cursor:pointer}
+body.booting.has-star-cursor,body.booting.has-star-cursor button{cursor:none}
 
