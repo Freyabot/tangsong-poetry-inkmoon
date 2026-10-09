@@ -65,3 +65,5 @@ body :is(button,a,p,h1,h2,h3,span,strong,small,label,output,blockquote){text-sha
 #star-cursor{z-index:3000}
 body.booting.has-star-cursor,body.booting.has-star-cursor button{cursor:none}
 
+
+body.has-star-cursor,body.has-star-cursor *{cursor:none!important}

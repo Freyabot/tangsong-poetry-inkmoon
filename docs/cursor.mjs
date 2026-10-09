@@ -6,7 +6,7 @@ export function initStarCursor(){
  const events=new AbortController(),options={signal:events.signal};
  function hide(){visible=false;cancelAnimationFrame(frame);frame=0;star.classList.remove('visible','pressed');document.body.classList.remove('has-star-cursor')}
  function paint(){frame=0;if(visible)star.style.transform=`translate3d(${x}px,${y}px,0)`}
- document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'){hide();return}if(e.target.closest('input,textarea,select,[contenteditable="true"],dialog[open]')){hide();return}x=e.clientX;y=e.clientY;visible=true;star.classList.add('visible');document.body.classList.add('has-star-cursor');star.classList.toggle('over-control',!!e.target.closest('button,a,#picker'));if(!frame)frame=requestAnimationFrame(paint)},options);
+ document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'){hide();return}const host=e.target.closest('dialog[open]')||document.body;if(star.parentElement!==host)host.append(star);x=e.clientX;y=e.clientY;visible=true;star.classList.add('visible');document.body.classList.add('has-star-cursor');star.classList.toggle('over-control',!!e.target.closest('button,a,#picker'));if(!frame)frame=requestAnimationFrame(paint)},options);
  document.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&visible)star.classList.add('pressed')},options);
  document.addEventListener('pointerup',()=>star.classList.remove('pressed'),options);
  document.documentElement.addEventListener('pointerleave',hide,options);
