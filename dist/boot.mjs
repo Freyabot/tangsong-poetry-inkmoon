@@ -1,5 +1,5 @@
 const started=performance.now();
-try{const saved=JSON.parse(localStorage.getItem('tangsong300:reduced'));document.body.classList.toggle('reduced',saved??matchMedia('(prefers-reduced-motion: reduce)').matches)}catch{}
+document.body.classList.toggle('reduced',matchMedia('(prefers-reduced-motion: reduce)').matches)
 export function bootProgress(value){const fill=document.querySelector('#boot-fill');if(fill)fill.style.transform=`scaleX(${value/100})`;document.querySelector('.boot-track')?.setAttribute('aria-valuenow',String(value))}
 export function failBoot(){document.querySelector('#boot-screen')?.remove();document.body.classList.remove('booting')}
 export async function finishBoot(musicReady){
