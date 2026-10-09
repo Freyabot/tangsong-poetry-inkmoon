@@ -3,7 +3,7 @@ document.body.classList.toggle('reduced',matchMedia('(prefers-reduced-motion: re
 export function bootProgress(value){const fill=document.querySelector('#boot-fill');if(fill)fill.style.transform=`scaleX(${value/100})`;document.querySelector('.boot-track')?.setAttribute('aria-valuenow',String(value))}
 export function failBoot(){document.querySelector('#boot-screen')?.remove();document.body.classList.remove('booting')}
 export async function finishBoot({music,sound}){
- const bg=new Image();bg.src=new URL('./assets/background.png',import.meta.url).href;
+ const bg=document.querySelector('#landscape img');
  const caption=document.querySelector('.boot-caption');caption.textContent='正在准备音乐与诗境';
  sound.prepare();
  await Promise.all([bg.decode(),document.querySelector('.boot-artwork').decode(),document.fonts?.ready,music.ready]);
