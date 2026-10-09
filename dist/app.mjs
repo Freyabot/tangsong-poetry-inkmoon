@@ -1,11 +1,11 @@
-import {initButtonEffects} from './button-effects.mjs?v=20261009-5';
-import {createMusic} from './music.mjs?v=20261009-5';
-import {bootProgress,finishBoot,failBoot} from './boot.mjs?v=20261009-5';
-import {createStore} from './store.mjs?v=20261009-5';
-import {createWheel,createEffects,SUCCESS_TIMING} from './motion.mjs?v=20261009-5';
-import {createSound} from './sound.mjs?v=20261009-5';
-import {initStarCursor} from './cursor.mjs?v=20261009-5';
-import {resonanceSentences,meaningPreview} from './resonance.mjs?v=20261009-5';
+import {initButtonEffects} from './button-effects.mjs?v=20261009-8';
+import {createMusic} from './music.mjs?v=20261009-8';
+import {bootProgress,finishBoot,failBoot} from './boot.mjs?v=20261009-8';
+import {createStore} from './store.mjs?v=20261009-8';
+import {createWheel,createEffects,SUCCESS_TIMING} from './motion.mjs?v=20261009-8';
+import {createSound} from './sound.mjs?v=20261009-8';
+import {initStarCursor} from './cursor.mjs?v=20261009-8';
+import {resonanceSentences,meaningPreview} from './resonance.mjs?v=20261009-8';
 
 const $=s=>document.querySelector(s),app=$('#app');
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -65,6 +65,6 @@ app.addEventListener('click',e=>{if(view!=='home'||practice||current().phase!=='
 window.addEventListener('hashchange',route);
 window.addEventListener('storage',()=>{if(!store)return;cancelFlow();cancelJudge();store.reload();music.sync();render();motion()});
 systemMotion.addEventListener('change',motion);
-async function init(){try{bootProgress(15);const response=await fetch('poems.json?v=20261009-5');if(!response.ok)throw Error('无法加载诗词');poems=await response.json();if(poems.length!==300||new Set(poems.map(p=>p.id)).size!==300)throw Error('诗词数据不完整');bootProgress(55);byId=new Map(poems.map(p=>[p.id,p]));let storage;try{storage=localStorage}catch{storage={getItem(){throw Error()},setItem(){throw Error()},removeItem(){throw Error()},length:0};saveError()}store=createStore(storage,poems.map(p=>p.id),saveError);active=validSession(store.state.session)||fresh(poems[0].id);saveSession();motion();for(let i=0;i<22;i++){const star=document.createElement('i');star.className='star';star.style.cssText=`left:${(i*37.23)%100}%;top:${(i*13.71)%60}%;--duration:${4+i%5}s;--delay:-${i*.73}s`;$('#stars').append(star)}music.sync();bootProgress(75);route();registerTools();initButtonEffects();await finishBoot({music,sound})}catch(err){failBoot();app.innerHTML='<section class="empty"><h1>诗境暂未打开</h1><p>内容加载失败，已有个人记录不会被清除。</p><button class="primary" id="reload">重新打开</button></section>';$('#reload').onclick=()=>location.reload();console.error(err)}}
+async function init(){try{bootProgress(15);const response=await fetch('poems.json?v=20261009-8');if(!response.ok)throw Error('无法加载诗词');poems=await response.json();if(poems.length!==300||new Set(poems.map(p=>p.id)).size!==300)throw Error('诗词数据不完整');bootProgress(55);byId=new Map(poems.map(p=>[p.id,p]));let storage;try{storage=localStorage}catch{storage={getItem(){throw Error()},setItem(){throw Error()},removeItem(){throw Error()},length:0};saveError()}store=createStore(storage,poems.map(p=>p.id),saveError);active=validSession(store.state.session)||fresh(poems[0].id);saveSession();motion();for(let i=0;i<22;i++){const star=document.createElement('i');star.className='star';star.style.cssText=`left:${(i*37.23)%100}%;top:${(i*13.71)%60}%;--duration:${4+i%5}s;--delay:-${i*.73}s`;$('#stars').append(star)}music.sync();bootProgress(75);route();registerTools();initButtonEffects();await finishBoot({music,sound})}catch(err){failBoot();app.innerHTML='<section class="empty"><h1>诗境暂未打开</h1><p>内容加载失败，已有个人记录不会被清除。</p><button class="primary" id="reload">重新打开</button></section>';$('#reload').onclick=()=>location.reload();console.error(err)}}
 function registerTools(){if(!document.modelContext?.registerTool)return;const lifecycle=new AbortController();const tool=(name,description,schema,execute,readOnly=false)=>{try{Promise.resolve(document.modelContext.registerTool({name,description,inputSchema:schema,execute,annotations:{readOnlyHint:readOnly,untrustedContentHint:false}},{signal:lifecycle.signal})).catch(()=>{})}catch{}};tool('read_poetry_progress','读取已点亮及收藏作品数量',{type:'object',properties:{},additionalProperties:false},()=>({completed:count(),total:300,favorites:Object.values(store.state.favorites).filter(f=>f.on).length}),true);tool('open_poem_detail','按作品ID打开诗词全文，不点亮作品',{type:'object',properties:{poemId:{type:'string'}},required:['poemId'],additionalProperties:false},input=>{if(!byId.has(input.poemId))throw Error('未知诗词ID');detailFromHome=false;navigate('detail',input.poemId);return {poemId:input.poemId,title:byId.get(input.poemId).title}});window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true})}
 initStarCursor();init();

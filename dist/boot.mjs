@@ -6,7 +6,7 @@ export async function finishBoot({music,sound}){
  const bg=new Image();bg.src=new URL('./assets/background.png',import.meta.url).href;
  const caption=document.querySelector('.boot-caption');caption.textContent='正在准备音乐与诗境';
  sound.prepare();
- await Promise.all([bg.decode(),document.fonts?.ready,music.ready]);
+ await Promise.all([bg.decode(),document.querySelector('.boot-artwork').decode(),document.fonts?.ready,music.ready]);
  bootProgress(100);
  caption.textContent='音乐与音效已就绪';
  const enter=document.createElement('button');enter.className='primary boot-enter';enter.textContent='进入诗境';document.querySelector('.boot-center').append(enter);
